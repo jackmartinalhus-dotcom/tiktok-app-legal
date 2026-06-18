@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorization Code — Auto Post</title>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       max-width:680px;margin:60px auto;padding:0 20px;line-height:1.6;color:#1a1a1a}
+  h1{font-size:1.5rem}
+  .box{background:#f4f4f6;border:1px solid #ddd;border-radius:10px;padding:18px;
+       word-break:break-all;font-family:ui-monospace,Menlo,monospace;font-size:1rem}
+  button{margin-top:14px;padding:10px 18px;border:0;border-radius:8px;
+         background:#fe2c55;color:#fff;font-size:1rem;cursor:pointer}
+  .muted{color:#666;font-size:.95rem}
+</style>
+</head>
+<body>
+<h1>Authorization code</h1>
+<p class="muted">Copy this value and paste it into the terminal where the
+auth script is waiting.</p>
+<div class="box" id="code">Reading code from the URL…</div>
+<button onclick="copyCode()">Copy code</button>
+<p class="muted" id="status"></p>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const err = params.get('error');
+  const box = document.getElementById('code');
+  if (code) {
+    box.textContent = code;
+  } else if (err) {
+    box.textContent = 'Error: ' + err + ' — ' + (params.get('error_description') || '');
+  } else {
+    box.textContent = 'No code found in the URL.';
+  }
+  function copyCode() {
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(() => {
+      document.getElementById('status').textContent = 'Copied!';
+    });
+  }
+</script>
+</body>
+</html>
